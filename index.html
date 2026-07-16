@@ -4,18 +4,20 @@
   <meta charset="utf-8" />
   <title>API Documentation</title>
   <link rel="stylesheet" href="https://unpkg.com" />
-</head> 
-<body> 
-  <divid="swagger-ui"></div> 
-  <script src="https://unpkg.com"></script> 
+</head>
+<body>
+  <divid="swagger-ui"></div>
+  <script src="https://unpkg.com"></script>
+  <script src="https://unpkg.com"></script>
   <script>
     window.onload = () => {
       window.ui = SwaggerUIBundle({
         url: 'adspring.yaml',
         dom_id: '#swagger-ui',
+        deepLinking: true
         preset: [
           SwaggerUIBundle.presets.apis,
-          SwaggerUIBundle.SwaggerUIStandalonePreset
+          SwaggerUIStandalonePreset
         ],
         layout: "BaseLayout"
       });
