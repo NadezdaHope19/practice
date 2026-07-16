@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Метод добавления соцсети блогера
+  license:
+    name: MIT
+servers:
+  - url: https://api.server.test/v1
+    description: Сервер по умолчанию
+paths:
+  /socialnet:
+    post:
+      summary: Добавить социальную сеть блогера
+      operationId: AddSocialNetwork
+      description: Метод доступен только авторизованному пользователю с ролью Advertiser/Блогер
+      tags:
+        - Социальные сети
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialNetworkRequest'
+        required: true       
+      responses:
+        '201':
+          description: Социальная сеть успешно добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '400':
+          description: Некорректный запрос (незаполненно обязательное поле или выбрано недопустимое значение)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 400
+                message: "Необходимо заполнить обязательные поля"
+                details:
+                  - field: "platform"
+                    reason: "Поле не заполнено или введено значение не из списка"
+                  - field: "social_link"
+                    reason: "Поле не заполнено"
+                  - field: "audienceId"
+                    reason: "Поле не заполнено или введено значение не из списка"
+                  - field: "reachId"
+                    reason: "Поле не заполнено или введено значение не из списка"
+                  - field: "topicId"
+                    reason: "Поле не заполнено или выбрано более 10 значений"
+                  - field: "region"
+                    reason: "Поле не заполнено или введено значение не из списка"
+        '401':
+          description: Пользователь не авторизован или access token некорректен (токен отсутствует, истек или некорректен)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 401
+                message: "Ошибка авторизации. Токен некорректен или срок действия токена истек"
+        '403':
+          description: Доступ запрещен. Метод доступен только пользователю с ролью Блогер
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 403
+                message: "Доступ запрещен. Только пользователи с ролью 'Блогер' могут добавлять социальные сети"
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 500
+                message: "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже"
+        default:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"              
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SocialNetworkRequest:
+      type: object
+      required:
+        - platform
+        - social_link
+        - audienceId
+        - reachId
+        - topicId
+        - region
+      properties:
+        platform:
+          type: string
+          description: Платформа социальной сети
+          enum:
+            - Instagram
+            - Telegram
+            - TikTok
+            - YouTube
+            - VKontakte
+            - Dzen
+          example: "Instagram"
+        social_link:
+          type: string
+          description: Ссылка на профиль соцсети не должна быть пустой, состоять или начинаться с пробела
+          pattern: '^\S+.*$'
+          example: 'https://instagram.com/IvanovIvan'
+        audienceId:
+          type: integer
+          description: Идентификатор диапазона размера аудитории (1 - до 1000, 2 - 1000–5000, 3 - 5000–10000, 4 - 10000–50000, 5 - 50000+)
+          enum: [1, 2, 3, 4, 5]
+          example: 2
+        reachId:
+          type: integer
+          description: Идентификатор диапазона среднего охвата (1 - до 1000, 2 - 1000–5000, 3 - 5000–10000, 4 - 10000–50000, 5 - 50000+)
+          enum: [1, 2, 3, 4, 5]
+          example: 3
+        topicId:
+          type: array
+          description: Список идентификаторов тематик блога (1 - мода/одежда, 2 - еда, 3 - дети, 4 - техника, 5 - красота, 6 - спорт, 7 - дом, 8 - авто, 9 - путешествия, 10 - 18+, 11 - творчество)
+          minItems: 1
+          maxItems: 10  
+          items:
+            type: integer
+            enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+          example: [1, 2, 3]
+        region:
+          type: string
+          description: Регион основной аудитории
+          enum:
+            - Мир
+            - Россия
+            - Казахстан
+          example: "Россия"
+    SocialNetworkResponse:
+      allOf:
+        - $ref: '#/components/schemas/SocialNetworkRequest'
+        - type: object
+          required:
+            - id
+            - status
+          properties:
+            id:
+              type: integer
+              description: Уникальный идентификатор добавленной социальной сети
+              example: 5545
+            status:
+              type: string
+              description: Статус верификации социальной сети
+              enum:
+                - Не верифицирована
+                - На проверке
+                - Верифицирована
+                - Отклонена
+              default: Не верифицирована
+    UserProfileResponse:
+      type: object
+      required:
+        - user_id
+        - user_name
+        - role
+      properties:
+        user_id:
+          type: integer
+          description: Уникальный идентификатор пользователя
+          example: 12345
+        user_name:
+          type: string
+          description: Имя пользователя
+          example: "Иван Иванов"
+        role:
+          type: string
+          description: Роль пользователя
+          enum:
+            - Блогер
+            - Селлер
+          example: "Блогер"
+        socialNetworks:
+          type: array
+          description: Список социальных сетей пользователя
+          items:
+            $ref: '#/components/schemas/SocialNetworkResponse'
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          description: Детали ошибки
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Имя поля, в котором ошибка
+              reason:
+                type: string
+                description: Причина ошибки для этого поля
