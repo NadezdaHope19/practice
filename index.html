@@ -11,8 +11,13 @@
   <script>
     window.onload = () => {
       window.ui = SwaggerUIBundle({
-        url: 'adspring.yaml', 
+        url: 'adspring.yaml',
         dom_id: '#swagger-ui',
+        preset: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIBundle.SwaggerUIStandalonePreset
+        ],
+        layout: "BaseLayout"
       });
     };
   </script>
