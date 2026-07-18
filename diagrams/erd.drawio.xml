@@ -198,7 +198,7 @@
           <mxGeometry height="10" width="30" as="geometry" />
         </mxCell>
         <mxCell id="2e49270ec7c68f3f-64" parent="1" style="swimlane;html=1;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#e0e0e0;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;swimlaneFillColor=#ffffff;align=center;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=14" value="reviews" vertex="1">
-          <mxGeometry height="112" width="160" x="110" y="-141" as="geometry" />
+          <mxGeometry height="112" width="160" x="520" y="-522" as="geometry" />
         </mxCell>
         <mxCell id="2e49270ec7c68f3f-65" parent="2e49270ec7c68f3f-64" style="shape=partialRectangle;top=0;left=0;right=0;bottom=0;html=1;align=left;verticalAlign=middle;fillColor=none;spacingLeft=60;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dropTarget=0;fontStyle=5;" value="row 1" vertex="1">
           <mxGeometry height="30" width="160" y="26" as="geometry" />
