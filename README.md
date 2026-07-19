@@ -1,6 +1,6 @@
 ## [Вопросы к бизнесу](https://github.com/NadezdaHope19/practice/blob/main/questions.md)
 ## [Требования к мобильному приложению Adspring](https://github.com/NadezdaHope19/practice/blob/main/requirements.md)
 ## [Описание метода добавления социальной сети](https://github.com/NadezdaHope19/practice/blob/main/adspring.yaml)
-## ER-диаграмма (логический уровень)
-## Описание таблиц
+## [ER-диаграмма (логический уровень)](https://github.com/NadezdaHope19/practice/blob/main/diagrams/erd.drawio.png)
+## [Описание таблиц](https://github.com/NadezdaHope19/practice/blob/main/table_descriptions.md)
 ## ER-диаграмма (физичсекий уровень)
