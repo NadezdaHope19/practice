@@ -7,9 +7,16 @@
 Важное ограничение: phone должен быть уникальным, для того, чтобы у одного пользователя можно было добавить 2 роли, поля is_blogger, is_seller не выносим их в отдельный справочник
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
-| user_id  | uuid | PK | not null, unique | Первичный ключ |
-| privacy_id | integer | FK | | Связь с таблицей privacy_policies |
-
+| user_id  | uuid | PK | not null, unique | первичный ключ |
+| privacy_id | integer | FK | not null | связь с таблицей privacy_policies |
+| user_name | varchar(200) | | not null | имя пользователя |
+| phone_number | varchar(15) | | not null, unique | телефон, на который зарегистрирован аккаунт |
+| reg_date | timestamptz | | | дата регистрации аккаунта |
+| is_blogger | boolean | | | роль "блогер" |
+| is_seller | boolean | | | роль "селлер" |
+| status_user | enum | | | статус аккаунта |
+| rating_avg | numeric(3, 2) | | | средний рейтинг |
+| rating_count | integer | | | количество оценок пользователя |
 ### privacy_policy
 Для хранения офферты и согласия об обработке данных, которые ддействовали на момент регистрации. Дата подписания = дата регистрации в таблице user
 
