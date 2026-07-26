@@ -33,20 +33,20 @@
 ## Селлер создает кампанию
 ### campaigns
 Таблица campaigns хранит все кампании, которые создают селлеры. 
-Связь: с users - одна кампания, один user_id, но у одного user_id может быть несколько кампаний; с topics - одна кампания, один topic_id
-Важное ограничение: удаление кампании "мягкое"
+Связь: с users - одна кампания, один user_id, но у одного user_id может быть несколько кампаний; с topics - одна кампания, один topic_id.
+Важное ограничение: удаление кампании "мягкое", budget максимальное значение 500000 руб.
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
 | campaign_id  | uuid | PK | not null, unique | первичный ключ |
 | user_id | uuid | FK | not null | создатель РК, связь с users |
 | topic_id | integer | FK | not null | тема РК, связь с topics |
-| description | text | | not null, unique | телефон, на который зарегистрирован аккаунт |
-| budget | numeric(8, 2) | | | дата регистрации аккаунта |
-| settings | JSONB | | | роль "блогер" |
-| payment_type | varchar() | | | роль "селлер" |
-| status_campaign | enum | | | статус аккаунта |
-| created_at | timestamptz | | | средний рейтинг |
-| deleted_at | timestamptz | | | дата блокировки пользователя |
+| description | text | | not null | описание рекламмной кампании |
+| budget | numeric(8, 2) | | not null, max 500000 руб  | бюджет РК |
+| settings | JSONB | | | гибкие настройки рекламмной кампании |
+| payment_type | varchar(20) | | not null | тип оплаты |
+| status_campaign | enum | | not null | текущий статус кампании |
+| created_at | timestamptz | | not null | дата создания кампании |
+| deleted_at | timestamptz | | | дата удаления кампании |
 
 ## Блогер заполняет профиль
 ### user_platforms
