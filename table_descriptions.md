@@ -30,9 +30,9 @@
 | created_at | timestamptz | | not null | дата публикации офферты |
 | is_active | boolean | | default true, limit 1 | актуальность документов |
 
-## Селлер создает кампанию
+## Селлер создает рекламмную кампанию
 ### campaigns
-Таблица campaigns хранит все кампании, которые создают селлеры.  
+Таблица campaigns хранит все рекламмные кампании (РК), которые создают селлеры.  
 Связь: с users - одна кампания, один user_id, но у одного user_id может быть несколько кампаний; с topics - одна кампания, один topic_id.  
 Важное ограничение: удаление кампании "мягкое", budget максимальное значение 500000 руб.  
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
@@ -40,9 +40,9 @@
 | campaign_id  | uuid | PK | not null, unique | первичный ключ |
 | user_id | uuid | FK | not null | создатель РК, связь с users |
 | topic_id | integer | FK | not null | тема РК, связь с topics |
-| description | text | | not null | описание рекламмной кампании |
+| description | text | | not null | описание РК |
 | budget | numeric(8, 2) | | not null, max 500000 руб  | бюджет РК |
-| settings | JSONB | | | гибкие настройки рекламмной кампании |
+| settings | JSONB | | | гибкие настройки РК |
 | payment_type | varchar(20) | | not null | тип оплаты |
 | status_campaign | enum | | not null | текущий статус кампании |
 | created_at | timestamptz | | not null | дата создания кампании |
