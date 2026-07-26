@@ -10,7 +10,7 @@
 | privacy_id | integer | FK | not null | связь с таблицей privacy_policies |
 | user_name | varchar(200) | | not null | имя пользователя |
 | phone_number | varchar(15) | | not null, unique | телефон, на который зарегистрирован аккаунт |
-| reg_date | timestamptz | | | дата регистрации аккаунта |
+| registred_at | timestamptz | | | дата регистрации аккаунта |
 | is_blogger | boolean | | | роль "блогер" |
 | is_seller | boolean | | | роль "селлер" |
 | status_user | enum | | | статус аккаунта |
@@ -19,6 +19,13 @@
 | blocked_at | timestamptz | | | дата блокировки пользователя |
 ### privacy_policy
 Для хранения офферты и согласия об обработке данных, которые ддействовали на момент регистрации. Дата подписания = дата регистрации в таблице user
+| Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
+|:--------:|:----:|:----:|:--------------------:|:----------:|
+| privacy_id | integer | PK | not null, unique | первичный ключ |
+| version | varchar(20) | | not null, unique | номер версии офферты |
+| term_text | text | | not null | текст офферты и согласия |
+| published_at | timestamptz | | | дата публикации офферты  |
+| is_active | boolean | | | дата регистрации аккаунта |
 
 ## Селлер создает кампанию
 ### campaigns
