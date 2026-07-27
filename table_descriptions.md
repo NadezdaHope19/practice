@@ -3,7 +3,7 @@
 ### users
 Таблица users хранит пользователей платформы.  
 Связь с таблицей privacy_policies: храним информацию о том, какая версия офферты и согласия на обработку данных была подписана при регистрации.  
-Важное ограничение: phone_number должен быть уникальным, один аккаунт на один номер телефона.  
+Важное ограничение: phone_number должен быть уникальным, один аккаунт на один номер телефона. status_user может быть активен только у блогера (is_blogger=true), если у него есть запись со статусом "верифицирована" в таблице user_platforms и запись в таблице subscriptions со значением ended_at больше текущей даты (активная подписка).  
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
 | user_id  | uuid | PK | not null, unique | первичный ключ |
@@ -13,7 +13,7 @@
 | registred_at | timestamptz | | | дата регистрации аккаунта |
 | is_blogger | boolean | | | роль "блогер" |
 | is_seller | boolean | | | роль "селлер" |
-| status_user | enum | | | статус аккаунта |
+| status_user | enum | | | статус аккаунта: "создан", "активен", "заблокирован" |
 | rating_avg | numeric(3, 2) | | | средний рейтинг |
 | rating_count | integer | | | количество оценок пользователя |
 | blocked_at | timestamptz | | | дата блокировки пользователя |
@@ -47,7 +47,7 @@
 | budget | numeric(8, 2) | | not null, max 500000 руб  | бюджет РК |
 | settings | JSONB | | | гибкие настройки РК |
 | payment_type | varchar(20) | | not null | тип оплаты |
-| status_campaign | enum | | not null | текущий статус кампании |
+| status_campaign | enum | | not null | текущий статус кампании: "подготовка", "в поиске", "на паузе", "в работе", "завершена", "отменена" |
 | created_at | timestamptz | | not null | дата создания кампании |
 | deleted_at | timestamptz | | | дата удаления кампании |
 
@@ -68,7 +68,7 @@
 | platform | enum | | not null  | платформа: "Instagram", "Telegram", "TikTok", "YouTube", "VKontakte", "Dzen" |
 | social_link | varchar() | | not null | ссылка на аккаунт |
 | region | enum | | not null | регион: "Россия", "мир", "Казахстан" |
-| status | enum | | not null | статус записи |
+| status | enum | | not null | статус записи: "не верифицирована", "верифицирована", "на проверке" |
 | created_at | timestamptz | | not null | дата добавления платформы |
 | deleted_at | timestamptz | | | дата удаления платформы |
 
@@ -97,7 +97,7 @@
 | offer_id  | uuid | PK | not null, unique | первичный ключ |
 | campaign_id | uuid | FK | not null | связь с campaigns |
 | blogger_id | uuid | FK | not null | блогер, которому направлен оффер, связь с users |
-| status_offer | enum | | not null | статус оффера: |
+| status_offer | enum | | not null | статус оффера: "создан", "ожидает подтверждения", "отклонен", "просрочен", "отменен" |
 | created_at | timestamptz | | not null  | дата и время создания оффера |
 | ended_at | timestamptz | | not null | дата и время истечения оффера |
 
