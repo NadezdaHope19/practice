@@ -134,8 +134,8 @@
 | deal_id | uuid | FK | not null | к какой сделке относится, связь с deals |
 | author_id | uuid | | not null | автор отзыва |
 | recepient_id | uuid | | not null | получатель отзыва |
-| rating | integer | | | оценка взаимодействия по 5-тибалльной |
-| comment | text | | | текст отзыва |
+| rating | integer | | not null | оценка взаимодействия по 5-тибалльной |
+| comment | text | | not null | текст отзыва |
 | created_at | timestamptz | | not null | время и дата создания отзыва |
 
 ## Сообщения и уведомления
