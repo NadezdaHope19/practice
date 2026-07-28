@@ -120,7 +120,7 @@
 | template_id  | integer | PK | not null, unique | первичный ключ |
 | templ_name | varchar(90) | | not null | наименование тарифа |
 | base_price | numeric(7, 2) | | not null | базовая стоимость тарифа |
-| period |  | | integer | период в месяцах: 1, 3, 6, 12 |
+| period | integer | | not_null | период на который действует подписка в месяцах: 1, 3, 6, 12 |
 | created_at | timestamptz | | not null  | время и дата начала действия |
 | is_active | boolean | | not null, default true | активность тарифа |
 
