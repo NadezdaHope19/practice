@@ -114,7 +114,7 @@
 |:--------:|:----:|:----:|:--------------------:|:----------:|
 | deal_id  | uuid | PK | not null, unique | первичный ключ, связь с safe_deal_payments, reviews, chats |
 | offer_id | uuid | FK | not null | связь с offers |
-| status_deal | enum | | not null | статус сделки: "создана", "в работе", "спор", "отмена", "на проверке", "завершена", "переговоры" |
+| status_deal | enum | | not null | статус сделки: "создана", "ожидает оплаты", "оплачено", "в работе", "спор", "отмена", "на проверке", "завершена", "переговоры" |
 | campaign_id | uuid | FK | not null | к какой кампании относится сделка |
 | blogger_id | uuid | | not null  | блогер-исполнитель |
 | created_at | timestamptz | | not null | время и дата создания сделки |
@@ -133,15 +133,15 @@ Cвязь:
 |:--------:|:----:|:----:|:--------------------:|:----------:|
 | safe_id  | uuid | PK | not null, unique | первичный ключ |
 | deal_id | uuid | FK | not null | связь с deals |
-| payment_id | enum | | not null | внешний идентификатор для связи с платежным сервисом |
-| payment_method | uuid | FK | not null | способ платежа |
-| status_payment | uuid | | not null  | статус платежа |
-| sum | timestamptz | | not null | сумма оплаты |
-| currency | timestamptz | | not null | валюта оплаты |
+| payment_id | varchar(255) | | not null | внешний идентификатор для связи с платежным сервисом |
+| payment_method | varchar(128) | FK | not null | способ платежа |
+| status_payment | enum | | not null  | статус платежа: "создан", "средства забронированы", "средства переведены исполнителю", "ошибка оплаты" |
+| sum | numeric(8, 2) | | not null | сумма оплаты |
+| currency | varchar(4) | | not null | валюта оплаты |
 | paid_at | timestamptz | | not null | время и дата оплаты |
-| retry_count |  | | not null | количество попыток |
-| error_code | timestamptz | | | код ошибки от платежного сервиса |
-| error_message | boolean | | | текст ошибки |
+| retry_count | integer | | not null | количество попыток |
+| error_code | varchar(64) | | | код ошибки от платежного сервиса |
+| error_message | text | | | текст ошибки |
 
 ## Подписка блогера
 ### subscriptions
