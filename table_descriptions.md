@@ -6,7 +6,7 @@
 Важное ограничение: phone_number должен быть уникальным, один аккаунт на один номер телефона. status_user может быть "активен" только у блогера (is_blogger=true), если у него есть запись со статусом "верифицирована" в таблице user_platforms и запись в таблице subscriptions со значением ended_at больше текущей даты (активная подписка).  
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
-| user_id  | uuid | PK | not null, unique | первичный ключ |
+| user_id  | uuid | PK | not null, unique | первичный ключ, связь с user_platforms, subscriptions, campaigns, offers, files, notifications |
 | privacy_id | integer | FK | not null | связь с таблицей privacy_policies |
 | user_name | varchar(200) | | not null | имя пользователя |
 | phone_number | varchar(15) | | not null, unique | телефон, на который зарегистрирован аккаунт |
@@ -23,7 +23,7 @@
 Важное ограничение: created_at по умолчанию текущее время и дата при создании записи, is_active=true не больше одной записи в таблице.  
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
-| privacy_id | integer | PK | not null, unique | первичный ключ |
+| privacy_id | integer | PK | not null, unique | первичный ключ, связь с users |
 | version | varchar(20) | | not null, unique | номер версии офферты |
 | offer_text | text | | not null | текст офферты |
 | consent_text | text | | not null | текст согласия |
@@ -40,7 +40,7 @@
 Важное ограничение: удаление кампании "мягкое", budget максимальное значение 500000 руб.  
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
-| campaign_id  | uuid | PK | not null, unique | первичный ключ |
+| campaign_id  | uuid | PK | not null, unique | первичный ключ, связь с offers, files |
 | seller_id | uuid | FK | not null | создатель РК, связь с users |
 | topic_id | integer | FK | not null | тема РК, связь с topics |
 | description | text | | not null | описание РК |
@@ -164,7 +164,7 @@ Cвязь:
 Связь с таблицей subscriotions: один тариф может быть во многих подписках, связь один ко многим.  
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
-| template_id  | integer | PK | not null, unique | первичный ключ |
+| template_id  | integer | PK | not null, unique | первичный ключ, связь с subscriptions |
 | templ_name | varchar(90) | | not null | наименование тарифа |
 | base_price | numeric(7, 2) | | not null | базовая стоимость тарифа |
 | period | integer | | not_null | период на который действует подписка в месяцах: 1, 3, 6, 12 |
@@ -178,7 +178,7 @@ Cвязь:
 Важное ограничение: один промокод может быть применим к выбранным тарифам указанным в массиве template_ids, если в массиве не указан ни один тариф, значит промокод распространяется на все тарифы.    
 | Имя поля | Тип  | Ключ | Условия, ограничения | Назначение |
 |:--------:|:----:|:----:|:--------------------:|:----------:|
-| promo_id  | integer | PK | not null, unique | первичный ключ |
+| promo_id  | integer | PK | not null, unique | первичный ключ, связь с subscrptions |
 | code | varchar(30) | | not null | текст промокода |
 | template_ids | integer[] | | not null | список тарифов к которым применим промокод |
 | created_at | timestamptz | | not null | время и дата создания |
