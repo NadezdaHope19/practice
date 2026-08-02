@@ -1,0 +1,24 @@
+@startuml
+autonumber
+actor user
+user -> front : выбор мероприятия
+front -> back : запрос доступных мест и цен
+back -> back : проверить доступные места и цену
+back -> front : свободные места и цены
+user -> front : выбор мест и нажать кнопку для брони
+front -> back : запрос на бронирование мест
+back -> back : проверить доступность мест и временно заблокировать
+back -> front : подтверждение брони
+front -> user : заполнить данные для оплаты
+user -> front : ввод данных (реквизиты, фио, тел, почта)
+front -> paymentsys : передача зашифрованной платежной информации
+paymentsys -> user : запрос кода для подверждения списания
+user -> paymentsys : ввод кода
+paymentsys -> paymentsys : списание средств
+paymentsys -> back : результат платежа
+back -> front : информация о бронировании
+front -> user : сгенерированный билет
+back -> paymentsys : запрос на транзакцию
+
+
+@enduml
