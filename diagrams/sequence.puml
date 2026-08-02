@@ -1,31 +1,55 @@
 @startuml
 autonumber
+skinparam actorStyle awesome
 actor user
-user -> front : выбор мероприятия
-front -> back : запрос доступных мест и цен
-back -> back : проверить доступные места и цену
-back -> front : свободные места и цены
-user -> front : выбор мест и нажать кнопку для брони
-front -> back : запрос на бронирование мест
-back -> back : проверить доступность мест и временно заблокировать
-alt #Lightgreen Места доступны для бронировния
-back -> front : подтверждение брони
-front -> user : заполнить данные для оплаты
-user -> front : ввод данных (реквизиты, фио, тел, почта)
-front -> paymentsys : передача зашифрованной платежной информации
+participant web #lightyellow
+participant server #lightyellow
+participant paymentsys #lightgreen
+user -> web : выбор мероприятия
+activate web
+web -> server : запрос доступных мест и цен
+activate server
+server -> server : проверить доступные места и цену
+server -> web : свободные места и цены
+user -> web : выбор мест и нажать кнопку продолжить
+web -> user : форма запроса данных для бронирования (ФИО, тел, почта)
+user -> web : заполнение формы и нажать кнопку бронировать 
+alt #ffcccc Форма заполнена некорректно
+web -> user : сообщение о некорректности введенных данных (указать поле)
+else #8ae6a3 Форма заполнена корректно
+web -> server : запрос на бронирование мест
+server -> server : проверить доступность мест
+alt #ffcccc Билеты недоступны для бронирования
+server -> web : билеты не доступны для бронирования
+web -> user : выберите другие места
+else #8ae6a3 Билеты доступны для бронировния
+server -> server : зарезервировать места на 20 мин
+server -> web : подтверждение брони
+web -> user : заполнить данные для оплаты
+alt #ffcccc Истекло время резерва
+server -> web : уведомление об истечении времени
+web -> user : время истекло, повторите бронирование
+else #8ae6a3 Время резерва не истекло
+user -> web : ввод данных (реквизиты, фио, тел, почта)
+web -> paymentsys : передача зашифрованной платежной информации 
+activate paymentsys
 paymentsys -> user : запрос кода для подверждения списания
 user -> paymentsys : ввод кода
-alt #LightGreen Успешный платеж
+alt #ffcccc Ошибка платежа
+paymentsys -> server : код ошибки
+server -> web : уведомление об ошибке
+web -> user : текст ошибки и дальнейшие действия
+else #8ae6a3 Успешный платеж
 paymentsys -> paymentsys : списание средств
-paymentsys -> back : подтверждение платежа
-back -> back : внести информацию о бронировании в БД
-back -> front : информация о бронировании
-front -> user : сгенерированный билет на экран и почту
-else #lightpink Ошибка платежа
-paymentsys -> back : Код ошибки
-back -> front : Текст ошибки и дальнейшие действия
+paymentsys -> server : подтверждение платежа 
+deactivate paymentsys
+server -> server : внести информацию о бронировании в БД
+server -> user : сгенерированный билет на почту
+server -> web : информация о бронировании
+deactivate server
+web -> user : сообщение об успешном бронировании
+deactivate web
 end
-else #lightpink Билеты недоступны для бронирования
-back -> front : билеты не доступны для бронирования
-front -> user : выберите другие места
+end
+end
 @enduml
