@@ -1,53 +1,60 @@
 @startuml
 autonumber
 skinparam actorStyle awesome
-actor user
-participant web #lightyellow
-participant server #lightyellow
-participant paymentsys #lightgreen
+actor "Пользователь" as user
+participant "Интерфейс" as web #lightyellow
+participant "Сервер" as server #lightyellow
+participant "Платежный сервис" as paymentsys #lightgreen
 user -> web : выбор мероприятия
 activate web
 web -> server : запрос доступных мест и цен
 activate server
 server -> server : проверить доступные места и цену
-server -> web : свободные места и цены
-user -> web : выбор мест и нажать кнопку продолжить
-web -> user : форма запроса данных для бронирования (ФИО, тел, почта)
-user -> web : заполнение формы и нажать кнопку бронировать 
+server --> web : свободные места и цены
+deactivate server
+web --> user : отображает карту зала с доступными местами и ценами
+user -> web : выбирает места и нажимает кнопку продолжить
+web --> user : форма запроса данных для бронирования (ФИО, тел, почта)
+user -> web : заполняет форму и нажмает кнопку бронировать 
 alt #ffcccc Форма заполнена некорректно
-web -> user : сообщение о некорректности введенных данных (указать поле)
-else #8ae6a3 Форма заполнена корректно
+web --> user : сообщение о некорректности введенных данных (указать поле)
+else #00ff7f Форма заполнена корректно
 web -> server : запрос на бронирование мест
+activate server
 server -> server : проверить доступность мест
 alt #ffcccc Билеты недоступны для бронирования
-server -> web : билеты не доступны для бронирования
-web -> user : выберите другие места
+server --> web : билеты не доступны для бронирования
+web --> user : выберите другие места
 else #8ae6a3 Билеты доступны для бронировния
-server -> server : зарезервировать места на 20 мин
-server -> web : подтверждение брони
-web -> user : заполнить данные для оплаты
+server -> server : создать бронирование, зарезервировать места на 20 мин
+server --> web : подтверждение брони
+web --> user : заполнить данные для оплаты
 alt #ffcccc Истекло время резерва
-server -> web : уведомление об истечении времени
-web -> user : время истекло, повторите бронирование
-else #8ae6a3 Время резерва не истекло
-user -> web : ввод данных (реквизиты, фио, тел, почта)
+server -> server : снять резерв с мест
+server --> web : уведомление об истечении времени
+web --> user : время истекло, повторите бронирование
+else #00ff7f Время резерва не истекло
+user -> web : ввод платежной информации
 web -> paymentsys : передача зашифрованной платежной информации 
 activate paymentsys
+paymentsys --> server : платежный токен
+server -> server : привязывает токен к резерву
+server -> paymentsys : запрос на списание денег
 paymentsys -> user : запрос кода для подверждения списания
-user -> paymentsys : ввод кода
+user --> paymentsys : ввод кода
 alt #ffcccc Ошибка платежа
-paymentsys -> server : код ошибки
-server -> web : уведомление об ошибке
-web -> user : текст ошибки и дальнейшие действия
+paymentsys --> server : код ошибки
+server --> web : уведомление об ошибке
+web --> user : текст ошибки и дальнейшие действия
 else #8ae6a3 Успешный платеж
 paymentsys -> paymentsys : списание средств
-paymentsys -> server : подтверждение платежа 
+paymentsys --> server : подтверждение платежа 
 deactivate paymentsys
-server -> server : внести информацию о бронировании в БД
-server -> user : сгенерированный билет на почту
-server -> web : информация о бронировании
+server -> server : внести информацию о платеже в БД и места отметить как купленные
+server --> user : сгенерированный билет на почту
+server --> web : информация о бронировании
 deactivate server
-web -> user : сообщение об успешном бронировании
+web --> user : сообщение об успешном бронировании
 deactivate web
 end
 end
