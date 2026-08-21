@@ -128,11 +128,12 @@
 |:--------:|:----:|:----:|:--------------------:|:----------:|
 | deal_id  | uuid | PK | not null, unique | первичный ключ, связь с safe_deal_payments, reviews, chats |
 | offer_id | uuid | FK | not null | связь с offers |
-| status_deal | enum | | not null | статус сделки: "создана", "ожидает оплаты", "оплачено", "в работе", "спор", "отмена", "на проверке", "завершена", "переговоры" |
+| status_deal | enum | | not null | статус сделки: "создана", "ожидает оплаты", "оплачено", "в работе", "спор", "отмена", "на проверке", "завершена", "автооплата", "переговоры" |
 | campaign_id | uuid | FK | not null | к какой кампании относится сделка |
 | blogger_id | uuid | | not null  | блогер-исполнитель |
 | created_at | timestamptz | | not null | время и дата создания сделки |
 | deadline_at | timestamptz | | not null | дедлайн по сделке |
+| review_deadline_at | timestamptz | | | дедлайн проверки рекламы селлером |
 | is_safe_deal | boolean | | not null, default false | признак безопасной сделки |
 
 ## Safe-сделка и платеж
