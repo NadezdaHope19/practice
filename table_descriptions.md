@@ -151,7 +151,9 @@ Cвязь:
 | payment_id | varchar(255) | | not null | внешний идентификатор для связи с платежным сервисом |
 | payment_method | varchar(128) | FK | not null | способ платежа |
 | status_payment | enum | | not null  | статус платежа: "создан", "средства забронированы", "средства переведены исполнителю", "ошибка оплаты" |
-| sum | numeric(8, 2) | | not null | сумма оплаты |
+| hold_amount | numeric(8, 2) | | not null | цена товара |
+| blogger_amount | numeric(8, 2) | | not null | вознаграждение блоггера |
+| plaform_fee | numeric(8, 2) | | not null | комиссия платформы |
 | currency | varchar(4) | | not null | валюта оплаты |
 | paid_at | timestamptz | | not null | время и дата оплаты |
 | retry_count | integer | | not null | количество попыток |
