@@ -14,7 +14,7 @@
 | is_blogger | boolean | | | роль "блогер" |
 | is_seller | boolean | | | роль "селлер" |
 | status_user | enum | | | статус аккаунта: "создан", "активен", "заблокирован" |
-| overdue_cnt | integer | | если >12, status_user="создан" | счетчик просрочек офферов |
+| overdue_cnt | integer | | если >=12, status_user="создан" | счетчик просрочек офферов |
 | rating_avg | numeric(3, 2) | | | средний рейтинг |
 | rating_count | integer | | | количество оценок пользователя |
 | blocked_at | timestamptz | | | дата блокировки пользователя |
